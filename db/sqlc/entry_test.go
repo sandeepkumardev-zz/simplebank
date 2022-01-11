@@ -64,10 +64,14 @@ func TestGetEntry(t *testing.T) {
 }
 
 func TestListEntries(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		createRandomEntry(t)
+	}
+
 	arg := ListEntriesParams{
 		AccountID: getAccountId(t),
 		Limit:     5,
-		Offset:    0,
+		Offset:    5,
 	}
 
 	entries, err := testQueries.ListEntries(context.Background(), arg)
