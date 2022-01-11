@@ -9,26 +9,26 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func getAccountId(t *testing.T) int64 {
+func getAccountId(t *testing.T) []int64 {
 	arg := ListAccountsParams{
-		Limit:  1,
-		Offset: 1,
+		Limit:  2,
+		Offset: 0,
 	}
 
 	accounts, err := testQueries.ListAccounts(context.Background(), arg)
 	require.NoError(t, err)
-	require.Len(t, accounts, 1)
+	require.Len(t, accounts, 2)
 	var accountId []int64
 	for _, account := range accounts {
 		accountId = append(accountId, account.ID)
 	}
 
-	return accountId[0]
+	return accountId
 }
 
 func createRandomEntry(t *testing.T) Entry {
 	arg := CreateEntryParams{
-		AccountID: getAccountId(t),
+		AccountID: getAccountId(t)[0],
 		Amount:    util.RandomMoney(),
 	}
 
@@ -69,7 +69,7 @@ func TestListEntries(t *testing.T) {
 	}
 
 	arg := ListEntriesParams{
-		AccountID: getAccountId(t),
+		AccountID: getAccountId(t)[0],
 		Limit:     5,
 		Offset:    5,
 	}
