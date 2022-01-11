@@ -34,14 +34,14 @@ func (q *Queries) CreateTransfer(ctx context.Context, arg CreateTransferParams) 
 	return i, err
 }
 
-const grtTransfer = `-- name: GrtTransfer :one
+const getTransfer = `-- name: GetTransfer :one
 select id, from_account_id, to_account_id, amount, created_at from transfers
 WHERE id = $1
 LIMIT 1
 `
 
-func (q *Queries) GrtTransfer(ctx context.Context, id int64) (Transfer, error) {
-	row := q.db.QueryRowContext(ctx, grtTransfer, id)
+func (q *Queries) GetTransfer(ctx context.Context, id int64) (Transfer, error) {
+	row := q.db.QueryRowContext(ctx, getTransfer, id)
 	var i Transfer
 	err := row.Scan(
 		&i.ID,

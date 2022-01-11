@@ -5,7 +5,7 @@ INSERT INTO transfers (
     $1, $2, $3
 ) RETURNING *;
 
--- name: GrtTransfer :one
+-- name: GetTransfer :one
 select * from transfers
 WHERE id = $1
 LIMIT 1;
