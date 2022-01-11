@@ -23,14 +23,6 @@ The service that we’re going to build is a simple bank. It will provide APIs f
     go install github.com/golang/mock/mockgen@v1.6.0
     ```
 
-## Starting - Local
-- Copy .env.example to .env in the same directory
-- Remember to create your own .env based on the template provided.
-- Update environment variables with credentials for db
-    ```sh
-    go run main.go
-    ```
-
 ## Setup infrastructure
 - Create the bank-network
     ``` bash
