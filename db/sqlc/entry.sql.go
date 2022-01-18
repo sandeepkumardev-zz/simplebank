@@ -5,6 +5,7 @@ package db
 
 import (
 	"context"
+	models "github.com/sandeepkumardev/simplebank/db/models"
 )
 
 const createEntry = `-- name: CreateEntry :one
@@ -15,14 +16,9 @@ INSERT INTO entries (
 )RETURNING id, account_id, amount, created_at
 `
 
-type CreateEntryParams struct {
-	AccountID int64 `json:"account_id"`
-	Amount    int64 `json:"amount"`
-}
-
-func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Entry, error) {
+func (q *Queries) CreateEntry(ctx context.Context, arg models.CreateEntryParams) (models.Entry, error) {
 	row := q.db.QueryRowContext(ctx, createEntry, arg.AccountID, arg.Amount)
-	var i Entry
+	var i models.Entry
 	err := row.Scan(
 		&i.ID,
 		&i.AccountID,
@@ -37,9 +33,9 @@ SELECT id, account_id, amount, created_at FROM entries
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetEntry(ctx context.Context, id int64) (Entry, error) {
+func (q *Queries) GetEntry(ctx context.Context, id int64) (models.Entry, error) {
 	row := q.db.QueryRowContext(ctx, getEntry, id)
-	var i Entry
+	var i models.Entry
 	err := row.Scan(
 		&i.ID,
 		&i.AccountID,
@@ -57,21 +53,15 @@ LIMIT $2
 OFFSET $3
 `
 
-type ListEntriesParams struct {
-	AccountID int64 `json:"account_id"`
-	Limit     int32 `json:"limit"`
-	Offset    int32 `json:"offset"`
-}
-
-func (q *Queries) ListEntries(ctx context.Context, arg ListEntriesParams) ([]Entry, error) {
+func (q *Queries) ListEntries(ctx context.Context, arg models.ListEntriesParams) ([]models.Entry, error) {
 	rows, err := q.db.QueryContext(ctx, listEntries, arg.AccountID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Entry{}
+	items := []models.Entry{}
 	for rows.Next() {
-		var i Entry
+		var i models.Entry
 		if err := rows.Scan(
 			&i.ID,
 			&i.AccountID,

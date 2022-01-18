@@ -1,16 +1,17 @@
-package db
+package test
 
 import (
 	"context"
 	"testing"
 	"time"
 
+	models "github.com/sandeepkumardev/simplebank/db/models"
 	"github.com/sandeepkumardev/simplebank/util"
 	"github.com/stretchr/testify/require"
 )
 
 func getAccountId(t *testing.T) []int64 {
-	arg := ListAccountsParams{
+	arg := models.ListAccountsParams{
 		Limit:  2,
 		Offset: 0,
 	}
@@ -26,8 +27,8 @@ func getAccountId(t *testing.T) []int64 {
 	return accountId
 }
 
-func createRandomEntry(t *testing.T) Entry {
-	arg := CreateEntryParams{
+func createRandomEntry(t *testing.T) models.Entry {
+	arg := models.CreateEntryParams{
 		AccountID: getAccountId(t)[0],
 		Amount:    util.RandomMoney(),
 	}
@@ -68,7 +69,7 @@ func TestListEntries(t *testing.T) {
 		createRandomEntry(t)
 	}
 
-	arg := ListEntriesParams{
+	arg := models.ListEntriesParams{
 		AccountID: getAccountId(t)[0],
 		Limit:     5,
 		Offset:    5,

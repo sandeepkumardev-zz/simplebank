@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	db "github.com/sandeepkumardev/simplebank/db/sqlc"
+	models "github.com/sandeepkumardev/simplebank/db/models"
 )
 
 type transferRequest struct {
@@ -31,7 +31,7 @@ func (server *Server) createTransfer(ctx *gin.Context) {
 		return
 	}
 
-	arg := db.TransferTxParams{
+	arg := models.TransferTxParams{
 		FromAccountID: req.FromAccountID,
 		ToAccountID:   req.ToAccountID,
 		Amount:        req.Amount,

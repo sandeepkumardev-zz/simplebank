@@ -5,6 +5,7 @@ package db
 
 import (
 	"context"
+	models "github.com/sandeepkumardev/simplebank/db/models"
 )
 
 const addAccountBalance = `-- name: AddAccountBalance :one
@@ -14,14 +15,9 @@ WHERE id = $2
 RETURNING id, owner, balance, currency, created_at
 `
 
-type AddAccountBalanceParams struct {
-	Amount int64 `json:"amount"`
-	ID     int64 `json:"id"`
-}
-
-func (q *Queries) AddAccountBalance(ctx context.Context, arg AddAccountBalanceParams) (Account, error) {
+func (q *Queries) AddAccountBalance(ctx context.Context, arg models.AddAccountBalanceParams) (models.Account, error) {
 	row := q.db.QueryRowContext(ctx, addAccountBalance, arg.Amount, arg.ID)
-	var i Account
+	var i models.Account
 	err := row.Scan(
 		&i.ID,
 		&i.Owner,
@@ -42,15 +38,11 @@ INSERT INTO accounts (
 ) RETURNING id, owner, balance, currency, created_at
 `
 
-type CreateAccountParams struct {
-	Owner    string `json:"owner"`
-	Balance  int64  `json:"balance"`
-	Currency string `json:"currency"`
-}
 
-func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (Account, error) {
+
+func (q *Queries) CreateAccount(ctx context.Context, arg models.CreateAccountParams) (models.Account, error) {
 	row := q.db.QueryRowContext(ctx, createAccount, arg.Owner, arg.Balance, arg.Currency)
-	var i Account
+	var i models.Account
 	err := row.Scan(
 		&i.ID,
 		&i.Owner,
@@ -76,9 +68,9 @@ SELECT id, owner, balance, currency, created_at FROM accounts
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
+func (q *Queries) GetAccount(ctx context.Context, id int64) (models.Account, error) {
 	row := q.db.QueryRowContext(ctx, getAccount, id)
-	var i Account
+	var i models.Account
 	err := row.Scan(
 		&i.ID,
 		&i.Owner,
@@ -95,9 +87,9 @@ WHERE id = $1 LIMIT 1
 FOR NO KEY UPDATE
 `
 
-func (q *Queries) GetAccountForUpdate(ctx context.Context, id int64) (Account, error) {
+func (q *Queries) GetAccountForUpdate(ctx context.Context, id int64) (models.Account, error) {
 	row := q.db.QueryRowContext(ctx, getAccountForUpdate, id)
-	var i Account
+	var i models.Account
 	err := row.Scan(
 		&i.ID,
 		&i.Owner,
@@ -115,20 +107,17 @@ LIMIT $1
 OFFSET $2
 `
 
-type ListAccountsParams struct {
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
-}
 
-func (q *Queries) ListAccounts(ctx context.Context, arg ListAccountsParams) ([]Account, error) {
+
+func (q *Queries) ListAccounts(ctx context.Context, arg models.ListAccountsParams) ([]models.Account, error) {
 	rows, err := q.db.QueryContext(ctx, listAccounts, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Account{}
+	items := []models.Account{}
 	for rows.Next() {
-		var i Account
+		var i models.Account
 		if err := rows.Scan(
 			&i.ID,
 			&i.Owner,
@@ -156,14 +145,11 @@ WHERE id = $1
 RETURNING id, owner, balance, currency, created_at
 `
 
-type UpdateAccountParams struct {
-	ID      int64 `json:"id"`
-	Balance int64 `json:"balance"`
-}
 
-func (q *Queries) UpdateAccount(ctx context.Context, arg UpdateAccountParams) (Account, error) {
+
+func (q *Queries) UpdateAccount(ctx context.Context, arg models.UpdateAccountParams) (models.Account, error) {
 	row := q.db.QueryRowContext(ctx, updateAccount, arg.ID, arg.Balance)
-	var i Account
+	var i models.Account
 	err := row.Scan(
 		&i.ID,
 		&i.Owner,

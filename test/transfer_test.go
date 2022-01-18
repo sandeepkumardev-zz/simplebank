@@ -1,19 +1,20 @@
-package db
+package test
 
 import (
 	"context"
 	"testing"
 	"time"
 
+	models "github.com/sandeepkumardev/simplebank/db/models"
 	"github.com/sandeepkumardev/simplebank/util"
 	"github.com/stretchr/testify/require"
 )
 
-func createRandomTransfer(t *testing.T) Transfer {
+func createRandomTransfer(t *testing.T) models.Transfer {
 	account1Id := getAccountId(t)[0]
 	account2Id := getAccountId(t)[1]
 
-	arg := CreateTransferParams{
+	arg := models.CreateTransferParams{
 		FromAccountID: account1Id,
 		ToAccountID:   account2Id,
 		Amount:        util.RandomMoney(),
@@ -57,7 +58,7 @@ func TestListTransfers(t *testing.T) {
 		createRandomTransfer(t)
 	}
 
-	arg := ListTransfersParams{
+	arg := models.ListTransfersParams{
 		FromAccountID: getAccountId(t)[0],
 		ToAccountID:   getAccountId(t)[1],
 		Limit:         5,
