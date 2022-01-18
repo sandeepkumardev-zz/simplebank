@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	models "github.com/sandeepkumardev/simplebank/db/models"
 	db "github.com/sandeepkumardev/simplebank/db/sqlc"
+	models "github.com/sandeepkumardev/simplebank/models"
 	"github.com/stretchr/testify/require"
 )
 

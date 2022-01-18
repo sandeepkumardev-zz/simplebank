@@ -5,7 +5,7 @@ package db
 
 import (
 	"context"
-	models "github.com/sandeepkumardev/simplebank/db/models"
+	models "github.com/sandeepkumardev/simplebank/models"
 )
 
 const createEntry = `-- name: CreateEntry :one
